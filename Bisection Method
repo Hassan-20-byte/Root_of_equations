@@ -1,0 +1,21 @@
+##Using Bisection Method
+x = np.linspace(2.0005, 3.0005, 1000)
+f = lambda x : x**3 -2*x -5
+a, b = 2, 3
+tol = 0.0005
+N = 20
+n = 1
+fa = f(a)
+while n <= N:
+    p = a + ( b - a)/2
+    Fp = f(p)
+    if Fp == 0 or (b-a)/2 < tol:
+        print(p)
+        break
+    n+= 1
+    if Fp*fa > 0:
+        a,Fa = p, Fp
+    else:
+        b  = p
+if(n==N):
+        print('the project failed after' + str(N) + 'iterations')
