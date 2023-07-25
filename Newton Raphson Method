@@ -1,0 +1,41 @@
+##Using Newton Raphson Method
+x = np.linspace(0.001, 1.001, 100)
+xk = 0.5
+tol = 1e-6
+s_x = sympy.symbols("x")
+s_f  = 3*s_x -sympy.cos(s_x) -1
+
+f = lambda x: sympy.lambdify(s_x, s_f, 'numpy')(x)
+fp = lambda x: sympy.lambdify(s_x, sympy.diff(s_f, s_x), 'numpy')(x)
+
+ 
+
+# setup a graph for visualizing the root finding steps
+fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+ax.plot(x, f(x))
+ax.axhline(0, ls=':', color='k')
+ax.set_xticks([0.1,0.3, 0.5,0.7,0.9])
+ax.set_xlabel(r'$x$', fontsize = 18)
+ax.set_ylabel(r'$f(x)$', fontsize = 18)
+
+# iterate Newton's method until convergence to the desired tolerance has been reached
+n = 0
+while np.abs(f(xk)) > tol:
+    xk_new = xk - f(xk) / fp(xk)
+    ax.plot([xk, xk], [0, f(xk)], color='k', ls=':')
+    ax.plot(xk, f(xk), 'ko')
+    ax.text(xk, -.5, r'$x_%d$' % n, ha='center')
+    ax.plot([xk, xk_new], [f(xk), 0], 'k-')
+    xk = xk_new
+    n += 1
+ax.plot(xk, f(xk), 'r*', markersize=15)
+ax.annotate("Root approximately at %.3f" % xk,fontsize=14,
+                family="serif",xy=(xk, f(xk)),
+                xycoords='data',xytext=(-150, +50),
+                textcoords='offset points',
+                arrowprops=dict(arrowstyle="->", 
+                                connectionstyle="arc3, rad=-.5"))
+ 
+ax.set_title("Newtown's method")
+ax.set_xticks([2, 2,2, 2.4, 2.6, 2.8])
+ 
