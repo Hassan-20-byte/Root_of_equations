@@ -1,0 +1,33 @@
+##using fixed point Method
+import numpy as np
+import matplotlib.pyplot as plt
+
+tol = 1e-9
+xk = 0.5
+
+f = lambda x: x**2 -5*x + 1
+xfun = lambda x: (x**2 + 1)/5
+x = np.linspace(0.5, 1.05, 1000)
+# setup a graph for visualizing the root finding steps
+fig, ax = plt.subplots(1, 1, figsize=(12, 4))
+ax.plot(x, f(x))
+ax.axhline(0, ls=':', color='k')
+# iterate Fixed point method until convergence to the desired tolerance has been reached
+n = 0
+while np.abs(f(xk))  > tol:
+    xk_new = xfun(xk)
+    ax.plot([xk, xk], [0, f(xk)], color='k', ls=':')
+    ax.plot(xk, f(xk), 'ko')
+    ax.text(xk, -.1, r'$x_%d$' % n, ha='center')
+    ax.plot([xk, xk_new], [f(xk), 0], 'k-')
+    xk = xk_new
+    n += 1
+ax.plot(xk, f(xk), 'r*', markersize=15)
+ax.annotate("Root approximately at %.3f" % xk,fontsize=14,
+                family="serif",xy=(xk, f(xk)),
+                xycoords='data',xytext=(-150, +50),
+                textcoords='offset points',
+                arrowprops=dict(arrowstyle="->", 
+                                connectionstyle="arc3, rad=-.5"))
+ 
+ax.set_title("Fixed point method")
